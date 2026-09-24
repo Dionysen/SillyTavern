@@ -1478,6 +1478,8 @@
     "Send a message": "发送消息",
     "Close chat": "关闭聊天",
     "Toggle Panels": "切换面板",
+    "Hide top toolbar": "隐藏顶部按钮条",
+    "Show top toolbar": "显示顶部按钮条",
     "CFG Scale": "CFG 缩放",
     "Back to parent chat": "返回到父级聊天",
     "Save checkpoint": "保存检查点",

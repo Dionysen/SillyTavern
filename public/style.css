@@ -769,6 +769,11 @@ hr {
     z-index: 3005;
 }
 
+body.top-toolbar-hidden #top-bar,
+body.top-toolbar-hidden #top-settings-holder {
+    display: none !important;
+}
+
 #sheld {
     display: flex;
     flex-direction: column;

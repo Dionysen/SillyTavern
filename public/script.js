@@ -230,7 +230,7 @@ import {
     formatInstructModeStoryString,
     getInstructStoppingSequences,
 } from './scripts/instruct-mode.js';
-import { initLocales, t } from './scripts/i18n.js';
+import { initLocales, t, translate } from './scripts/i18n.js';
 import { getFriendlyTokenizerName, getTokenCount, getTokenCountAsync, initTokenizers, saveTokenCache } from './scripts/tokenizers.js';
 import {
     user_avatar,
@@ -11547,6 +11547,17 @@ jQuery(async function () {
     const menu = $('#options');
     let isOptionsMenuVisible = false;
 
+    function updateTopToolbar(hidden) {
+        document.body.classList.toggle('top-toolbar-hidden', hidden);
+        const label = hidden ? 'Show top toolbar' : 'Hide top toolbar';
+        $('#option_settings span').attr('data-i18n', label).text(translate(label));
+        $('#option_settings i').toggleClass('fa-eye', hidden).toggleClass('fa-eye-slash', !hidden);
+    }
+
+    eventSource.on(event_types.APP_READY, () => {
+        updateTopToolbar(accountStorage.getItem('topToolbarHidden') === 'true');
+    });
+
     function showMenu() {
         showBookmarksButtons();
         menu.fadeIn(animation_duration);
@@ -11664,26 +11675,9 @@ jQuery(async function () {
         } else if (id == 'option_close_chat') {
             await closeCurrentChat();
         } else if (id === 'option_settings') {
-            //var checkBox = document.getElementById("waifuMode");
-            var topBar = document.getElementById('top-bar');
-            var topSettingsHolder = document.getElementById('top-settings-holder');
-            var divchat = document.getElementById('chat');
-
-            //if (checkBox.checked) {
-            if (topBar.style.display === 'none') {
-                topBar.style.display = ''; // or "inline-block" if that's the original display value
-                topSettingsHolder.style.display = ''; // or "inline-block" if that's the original display value
-
-                divchat.style.borderRadius = '';
-                divchat.style.backgroundColor = '';
-            } else {
-                divchat.style.borderRadius = '10px'; // Adjust the value to control the roundness of the corners
-                divchat.style.backgroundColor = ''; // Set the background color to your preference
-
-                topBar.style.display = 'none';
-                topSettingsHolder.style.display = 'none';
-            }
-            //}
+            const hidden = !document.body.classList.contains('top-toolbar-hidden');
+            updateTopToolbar(hidden);
+            accountStorage.setItem('topToolbarHidden', String(hidden));
         }
         hideMenu();
     });
