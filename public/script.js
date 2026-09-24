@@ -11554,8 +11554,15 @@ jQuery(async function () {
         $('#option_settings i').toggleClass('fa-eye', hidden).toggleClass('fa-eye-slash', !hidden);
     }
 
+    function updateWandButton(hidden) {
+        document.body.classList.toggle('wand-button-hidden', hidden);
+        const label = hidden ? 'Show wand button' : 'Hide wand button';
+        $('#option_toggle_wand span').attr('data-i18n', label).text(translate(label));
+    }
+
     eventSource.on(event_types.APP_READY, () => {
         updateTopToolbar(accountStorage.getItem('topToolbarHidden') === 'true');
+        updateWandButton(accountStorage.getItem('wandButtonHidden') === 'true');
     });
 
     function showMenu() {
@@ -11674,6 +11681,10 @@ jQuery(async function () {
             setTimeout(() => openMessageDelete(fromSlashCommand, deleteToolCalls), animation_duration);
         } else if (id == 'option_close_chat') {
             await closeCurrentChat();
+        } else if (id === 'option_toggle_wand') {
+            const hidden = !document.body.classList.contains('wand-button-hidden');
+            updateWandButton(hidden);
+            accountStorage.setItem('wandButtonHidden', String(hidden));
         } else if (id === 'option_settings') {
             const hidden = !document.body.classList.contains('top-toolbar-hidden');
             updateTopToolbar(hidden);
